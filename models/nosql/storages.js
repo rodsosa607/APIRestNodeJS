@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongooseDelete = require('mongoose-delete');
 
 const StorageSchema = new mongoose.Schema(
     {
@@ -15,4 +16,5 @@ const StorageSchema = new mongoose.Schema(
 
 //aquí se exporta un modelo de mongoose, se asigna el nombre "users" a la collección a partir del
 //schema StorageSchema
+StorageSchema.plugin(mongooseDelete, {overrideMethods:"all"});
 module.exports = mongoose.model("storages", StorageSchema)
