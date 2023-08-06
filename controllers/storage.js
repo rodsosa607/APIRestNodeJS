@@ -27,7 +27,7 @@ const getItems = async (req, res) => {
 const getItem = async (req, res) => {
     try {
         const {id} = matchedData(req);
-        const data = await storageModel.findById(id); //en mongoose así se dice que traiga todo
+        const data = await storageModel.findById(id); //en mongoose así se dice que traiga un id
         res.send({data});
     } catch (error) {
         handleHttpError( res, 'ERROR_GET_ITEM_DETAIL');            
@@ -40,6 +40,7 @@ const getItem = async (req, res) => {
  * @param {*} res
  */
 const createItem = async (req, res) => {
+    try{
     const { body, file } = req;
     console.log(file);
 
@@ -50,6 +51,9 @@ const createItem = async (req, res) => {
 
     const data = await storageModel.create(fileData);
     res.send({data});
+} catch (error){
+    handleHttpError(res,'ERROR_CREATE_ITEM');
+}
 };
 
 /**
@@ -68,11 +72,12 @@ const deleteItem = async (req, res) => {
     try {
         const {id} = matchedData(req);
         const dataFile = await storageModel.findById(id); //en mongoose find por Id
+        await storageModel.delete({_id: id}); //uso delete para eliminar solo lógicamente sino debe utilizar deleteOne
+
         const {filename} = dataFile;
         const filePath = `${MEDIA_PATH}/${filename}` //TODO toda la ruta
 
-        fs.unlinkSync(filePath);
-
+        //fs.unlinkSync(filePath); //comento para que no elimine el archivo físico local
         const data = {
             filePath,
             delete:1
