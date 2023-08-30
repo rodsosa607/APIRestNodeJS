@@ -1,0 +1,26 @@
+/**
+ * Esto es un middleware y los middleware tienen que reposnder ante
+ * las peticiones que se están realizando
+ */
+const { check } = require('express-validator');
+const validateResults = require('../utils/handleValidator');
+
+const validatorRegister = [
+    check("name").exists().notEmpty().isLength({min:3,max:99}),
+    check("age").exists().notEmpty().isNumeric(),
+    check("password").exists().notEmpty().isLength({min:3,max:10}),
+    check("email").exists().notEmpty().isEmail(),
+    (req, res, next) => {
+        return validateResults(req, res, next);
+    }
+];
+
+const validatorLogin = [
+    check("password").exists().notEmpty().isLength({min:3,max:10}),
+    check("email").exists().notEmpty().isEmail(),
+    (req, res, next) => {
+        return validateResults(req, res, next);
+    }
+];
+
+module.exports = { validatorRegister, validatorLogin };
