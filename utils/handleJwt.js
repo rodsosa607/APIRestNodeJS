@@ -35,4 +35,4 @@ const verifyToken = async (tokenJwt) => {
     }
 }
 
-module.exports = { jsonwebtoken, verifyToken };
+module.exports = { tokenSign, verifyToken };
